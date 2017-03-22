@@ -1,0 +1,63 @@
+<h1>SMSServer - EMail Interface</h1>
+
+<h2>Introduction</h2>
+<p>With this interface, SMSServer uses POP3/IMAP and SMTP to do its job: inbound messages are send with SMTP to a given adress. Outbound messages are read from a POP3/IMAP mailbox.</p>
+
+<h2>File handling</h2>
+
+<h3>Inbound messsages</h3>
+<p>Each inbound message is send as a seperate mail to the given receipient (see below). The sender number is written as subject. All information of the messages are written into the body of the mail.</p>
+
+<h3>Outbound messsages</h3>
+<p>On each run the POP3/IMAP mailbox is checked for new mails. If there are new mails they are downloaded and send as SMS. The subject have to contain the receipient number. The message body of the SMS is used as message body of the mail.</p>
+
+<h2>Configuration File</h2>
+<p>This interface requires the following configuration settings:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b> </td></tr>
+<tr><td>mailbox_protocol</td><td>Protocol for the mailbox. Have to be <b>pop3</b> or <b>imap</b></td></tr>
+<tr><td>mailbox_host</td><td>Hostname of the mailbox server</td></tr>
+<tr><td>mailbox_port</td><td>Port of the mailbox server. <b>110</b> for POP3 and <b>149</b> for IMAP</td></tr>
+<tr><td>mailbox_user</td><td>Username to login for the mailbox</td></tr>
+<tr><td>mailbox_password</td><td>Password to login for the mailbox</td></tr>
+<tr><td>from</td><td>Sender for all emails</td></tr>
+<tr><td>to</td><td>Receipient for all emails</td></tr>
+<tr><td>smtp_host</td><td>Hostname of the smtp server</td></tr>
+<tr><td>smtp_port</td><td>Port of the smtp server</td></tr>
+<tr><td>smtp_user</td><td>Username to login for the smtp server</td></tr>
+<tr><td>smtp_password</td><td>Password to login for the smtp server</td></tr>
+<tr><td>message_subject</td><td>Text for the subject. Templating possible (see below)</td></tr>
+<tr><td>message_body</td><td>Path to the plain-text template file (see below)</td></tr>
+</table>
+<p>Example:</p>
+<blockquote>
+interface.0=email1, Email<br />
+email1.mailbox_protocol=pop3<br />
+email1.mailbox_host=host<br />
+email1.mailbox_port=110<br />
+email1.mailbox_user=user<br />
+email1.mailbox_password=password<br />
+email1.to=to@example.com<br />
+email1.from=from@example.com<br />
+email1.smtp_host=host<br />
+email1.smtp_port=25<br />
+email1.smtp_user=user<br />
+email1.smtp_password=password<br />
+email1.message_subject=SMS from %originator%<br />
+email1.message_body=emailbody.tpl<br />
+</blockquote>
+
+<h2>Templating</h2>
+<p>The subject and the mail body for inbound messages emails is customizable through a simple templating system.</p>
+<p>During processing the following placeholders are replaced by the value of the current inbound message.</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td>%gatewayId%</td><td>Replaced by the ID of the gateway which the message was received from </td></tr>
+<tr><td>%encoding%</td><td>Replaced by the encoding of the inbound message</td></tr>
+<tr><td>%date%</td><td>Replaced by the date when the originator has sent the message</td></tr>
+<tr><td>%text%</td><td>Replaced by the message text itself</td></tr>
+<tr><td>%pduUserData%</td><td>Replaced by the raw PDU data block of the message</td></tr>
+<tr><td>%originator%</td><td>Replaced by the originator of the inbound message</td></tr>
+<tr><td>%memIndex%</td><td>Replaced by GSM Modem/Phone memory index from which the message was read</td></tr>
+<tr><td>%mpMemIndex%</td><td>Replaced by GSM Modem/Phone memory index for multipart messages</td></tr>
+</table>
+<p>All occurence of this placeholders in the template text (subject text string in configuration file or content of the body template file) are replaced!</p>

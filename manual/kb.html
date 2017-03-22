@@ -1,0 +1,43 @@
+<h1>Knowledge Base Articles</h1>
+
+<h2>Enable/Disable debug logging</h2>
+<p>If you report an error, you may get asked to provide a debug log.</p>
+<p>The easiest way to do this is to run your SMSLib enabled application with the <b>-Dsmslib.debug</b> system configuration, for example:</p>
+<blockquote>
+java -Dsmslib.debug myApp
+</blockquote>
+<p>This will output a great deal of debug info.</p>
+<p>For even more debugging info, add the <b>-Dsmslib.debug_queue</b> parameter - this will also output the queues' input/output. But, in this case, the log will get really big!</p>
+<p>So, when asked for a log, add those parameters, redirect the output to a file and sent it over.</p>
+<p>Of course, if you are familiar with Log4j, you can use your own logger - just be sure to set it to the maximum level.</p>
+
+<h2>Virtual Serial Ports and Linux</h2>
+<p>If you are using SMSLib for Java on Linux with the RxTx communication library, you may encounter a situation where you get a no response exception, as if no modem is actually connected to your computer. This error situation will hit you if you are working with virtual serial ports, like USB or IrDA bridges / virtual devices.</p>
+<p>This is attributed to RxTx: SMSLib v3 uses comm port signals (data ready,etc) to wake-up and read port data. Under some circumstances, RxTx does not forward these port signal to the application, so SMSLib thinks that it never gets any data back from the modem.</p>
+<p>SMSLib has implemented a work-around for this situation: If you face the above problem, run your applications with the <b>-Dsmslib.serial.polling</b> parameter. This will instruct SMSLib to work in poll mode: It will not wait for comm port's data signals but it will poll the port every 300 milliseconds to see if there is any data available for reading.</p>
+<p>Please note that if you are using SUN Java Comm v3 (instead of RxTx) you generally not need to use this switch, unless you find that your modem does not work otherwise.</p>
+<p>In any case, the polling switch is a workaround and should be avoided if things work well without it.</p>
+
+<h2>Linux and undetectable ports</h2>
+<p>If you using USB/Bluetooth/IrDA connections on Linux, RxTx may not recognize your serial device / port. You may get a NoSuchPortException.</p>
+<p>Assuming that your port is named <b>/dev/xyz-port</b> , you can:</p>
+<ul>
+<li>Either set the <b>gnu.io.rxtx.SerialPorts</b> system property with your device name.</li>
+<li>Create a symbolic link of your <b>/dev/xyz-port</b> to something resembling a standard serial port, like <b>/dev/ttyS20</b>, and use this one instead.</li>
+</ul>
+
+<h2>CommTest does not detect modem</h2>
+<p>There are times when you run the CommTest utility but your modem is not detected.</p>
+<p>Several GSM modems require a standard baud rate in order to identify the connection. This baud rate can be changed with some special AT commands.</p>
+<p>The issue here is that the CommTest utility does not check all valid baud rates. If you check the source code, there is an array (<b>bauds[]</b>) which hold all the rates that will be test. What you can do is to add to this array all baud rates that you suspect are missing. Recompile and run the CommTest again and check if your modem is now detected.</p>
+
+<h2>My modem does not respond</h2>
+<p>If everything else seems to have been setup properly, keep in mind that most GSM modems have a default baud speed at which they operate. Most of the times, the autobaud sensing feature does not exist or does not work like GSM phones. So, be sure that you are using the baud rate speed that you modem requires.</p>
+
+<h2>Linux/RxTx: unresolved references</h2>
+<p>When running under Linux and RxTx, you may encounter some unresolved errors during execution. These errors mean that your Java runtime cannot locate the necessary RxTx library (.so).</p>
+<p>To resolve this, run your application with the <b>-Djava.library.path=/dir-path/to/.so/file</b> in order to instruct java to search to the specific directory where you have placed the RxTx so files.</p>
+
+<h2>Framing Errors</h2>
+<p>If you are getting one or two framing errors during the initial connection (and this happens on a random basis) its probably nothing.</p>
+<p>If you are consistently getting framing errors, probably you are trying to connect with a baud rate that is unsupported by your modem. Some modems require a fixed baud rate to operate. Either consult your manual or try with different baud speeds.</p>

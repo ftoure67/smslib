@@ -1,0 +1,10 @@
+.project
+*.log
+/Eclipse Formatter
+/bin
+.settings
+*.properties
+*.jar
+*.pbc
+.classpath
+*.zip

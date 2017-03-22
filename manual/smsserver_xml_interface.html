@@ -1,0 +1,73 @@
+<h1>SMSServer - XML Interface</h1>
+
+<h2>Introduction</h2>
+<p>With this interface, SMSServer uses two folders with xm files to do its job: inbound messages are stored in an xml file. Outbound messages are saved in an xml file and are read by the application.</p>
+
+<h2>File handling</h2>
+
+<h3>Inbound messsages</h3>
+<p>During each run all messages are read form the mobile device and stored in a new xml file in the inbound folder with a current timestamp as name. If there are no new files then no file is generated. So each file contains one inbound message.</p>
+<p>The XML files are valid against this DTD:</p>
+<blockquote>
+<pre>
+&lt;!ELEMENT message  (originator, text, receive_date)&gt;
+&lt;!ATTLIST message
+   id          ID     #REQUIRED
+   gateway_id  CDATA  #REQUIRED
+   type        CDATA  #IMPLIED
+   encoding    CDATA  #IMPLIED&gt;
+&lt;!ELEMENT originator   (#PCDATA)&gt;
+&lt;!ELEMENT text         (#PCDATA)&gt;
+&lt;!ELEMENT receive_date (#PCDATA)&gt;
+</pre>
+</blockquote>
+
+<h3>Outbound messages</h3>
+<p>During each run the outgouing folder is scanned for new, unproccessed files. These files are parsed and the messages are send through the defined gateway.</p>
+<p>Each file have to contain one message and is moved after processing in one of the following directories under <b>out</b> to avoid reprocessing:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Directory</b></td><td><b>Reason</b></td></tr>
+<tr><td><b>out/sent</b></td><td>Successfully send message files are moved here.</td></tr>
+<tr><td><b>out/failed</b></td><td>Not successfully send message files are moved here. The reason has something to do with SMSServer and your GSM envoirement like no link or missing credits.</td></tr>
+<tr><td><b>out/broken</b></td><td>Malformed files which arent't valid XML files against the DTD are moved here.</td></tr>
+</table>
+<p>The outbound files have to be valid against this DTD:</p>
+<blockquote>
+<pre>
+&lt;!ELEMENT message  (recipient, text, originator, create_date?)&gt;
+&lt;!ATTLIST message 
+    id             ID      #REQUIRED
+    gateway_id     CDATA   #REQUIRED
+    status         CDATA   "U" 
+    encoding       CDATA   "7"
+    priority       CDATA   "N"
+    ref_no         CDATA   #IMPLIED
+    status_report  CDATA   #IMPLIED
+    flash_sms      CDATA   #IMPLIED
+    src_port       CDATA   #IMPLIED
+    dst_port       CDATA   #IMPLIED &gt; 
+&lt;!ELEMENT recipient   (#PCDATA)&gt;
+&lt;!ELEMENT text        (#PCDATA)&gt;
+&lt;!ELEMENT originator  (#PCDATA)&gt;
+&lt;!ELEMENT create_date (#PCDATA)&gt;
+</pre>
+</blockquote>
+<ul>
+<li><b>create_date</b> has to be in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601</a> format.</li>
+<li><b>encoding</b> hast to be <b>7</b> for 7bit or <b>8</b> for 8bit otherwise UCSS2 is used.</li>
+<li><b>priority</b> hast to be <b>H</b> for high, <b>N</b> for normal or <b>L</b> for low priority.</li>
+</ul>
+
+<h2>Configuration File</h2>
+<p>This interface requires the following configuration settings:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b></td></tr>
+<tr><td>in</td><td>The folder where files with inbound messages are stored</td></tr>
+<tr><td>out</td><td>The folder where files with outbound message are searched</td></tr>
+</table>
+<p>Example:</p>
+<blockquote>
+interface.0=xml1, Xml<br />
+xml1.in=C:/smssrv/in<br />
+xml1.out=C:/smssrv/out<br />
+</blockquote>

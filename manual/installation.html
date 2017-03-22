@@ -1,0 +1,77 @@
+﻿<h1>Installation Instructions</h1>
+
+<h2>Prerequisites</h2>
+<p>To use SMSLib, you should install the following components:</p>
+<ul>
+<li>SUN JDK 1.5 or newer.</li>
+<li>Java Communications Library.</li>
+<li>Apache ANT for building the sources.</li>
+<li>Apache log4j for logging.</li>
+<li>Apache Jakarta Commons - NET.</li>
+<li>JavaMail.</li>
+<li>Java Activation Framework (JAF).</li>
+</ul>
+
+<h2>Java Communications Library</h2>
+<p>You have two options:</p>
+<ul>
+<li>For Win32 systems you should use the SUN Java Comm v2 which is provided in the Downloads section.</li>
+<li>For other systems (Linux, Unix, BSD, etc), you are advised to install either Java Comm v3 or RxTx, whichever is available. When both choices are available, you are advised to use Java Comm v3.</li>
+</ul>
+
+<h3>Java Comm Installation</h3>
+<p>The installation procedure for both the old Java Comm v2 and the new Java Comm v3 is identical.</p>
+<p>Java Comm v2 is for Win32 systems and it is available for download at the Downloads section.</p>
+<p>Java Comm v3 is for Linux systems and it is available for download directly from <a href="https://cds.sun.com/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_SMI-Site/en_US/-/USD/ViewProductDetail-Start?ProductRef=JAVACOMM-3.0.1-LX-SP-G-F@CDS-CDS_SMI">SUN downloads</a>. Note that registration is required.</p>
+<p>To install it, unzip the downloaded archive file in a temporary place and do the following copies:</p>
+<ul>
+<li>File comm.jar should go under <code>JDKDIR/jre/lib/ext/</code></li>
+<li>File javax.comm.properties should go under <code>JDKDIR/jre/lib/</code></li>
+<li>Library files (i.e. win32com.dll for Win32 or the so Linux library files) should go under <code>JDKDIR/jre/bin/</code></li>
+</ul>
+<p>If you have a separate JRE directory, do the same copies for the JREDIR directory!</p>
+
+<h3>RxTx Installation</h3>
+<p>RxTx binaries' pack is available from <a href="http://rxtx.qbang.org/pub/rxtx/rxtx-2.1-7-bins-r2.zip">here</a>. The provided link will download the distro with some standard binaries (for linux 32bit, 64 bit, etc). If binaries for your specific operating system are not included, you may consider recompiling RxTx yourselves.</p>
+<p>To install it, unzip the distribution file in a temporary place and do the following copies:</p>
+<ul>
+<li>File RXTXcomm.jar should go under <code>JDKDIR/jre/lib/ext/</code></li>
+<li>The necessary library (e.g.. for Linux 32bit, the librxtxSerial.so) should go under <code>JDKDIR/jre/bin/</code></li>
+</ul>
+<p>If you have a separate JRE directory, do the same copies for the JREDIR directory!</p>
+
+<h3>Communications Library - Post-installation checklist</h3>
+<p>Starting from v3.3, SMSLib will select and use whichever comm library is installed via reflection. So there is no need to change anything in the sources - SMSLib will detect and use the comm library you have already installed by itself.</p>
+<p>Other issues that you may have to consider:</p>
+<ul>
+<li>If you are using Linux/RxTx, it has been reported that the user running the smslib enabled app should be added to the "uucp" group. If you get exceptions like "<b>java.lang.reflect.InvocationTargetException</b>" you may have to add your users to this group.</li>
+</ul>
+
+<h2>Apache ANT</h2>
+<p>Download and install Apache Ant from <a href="http://ant.apache.org">here</a>.</p>
+
+<h2>Apache log4j</h2>
+<p>Download Apache log4j from <a href="http://logging.apache.org/log4j">here</a>. You need to have the <b>log4j-1.2.14.jar</b> file (1.2.14 was the current version at the time of this writing) somewhere in your classpath or in Java's lib/ext directories.</p>
+
+<h2>Apache Jakarta Commons - NET</h2>
+<p>Download Apache Jakarta Commons/NET from <a href="http://jakarta.apache.org/commons/index.html">here</a>. You need to have the <b>commons-net-1.4.1.jar</b> file (1.4.1 was the current version at the time of this writing) somewhere in your classpath or in Java's lib/ext directories.</p>
+
+<h2>JavaMail</h2>
+<p>Download JavaMail from <a href="http://java.sun.com/products/javamail/downloads/index.html">here</a>. You need to have the <b>mail.jar</b> file somewhere in your classpath or in Java's lib/ext directories.</p>
+
+<h2>Java Activation Framework (JAF)</h2>
+<p>Download JAF from <a href="http://java.sun.com/javase/technologies/desktop/javabeans/jaf/downloads/index.html">here</a>. You need to have the <b>activation.jar</b> file somewhere in your classpath or in Java's lib/ext directories.</p>
+
+<h2>Building SMSLib</h2>
+<p>The ANT build file provides the following targets:</p>
+<ul>
+<li>all : Builds everything (classes, creates the jar file, javadocs).</li>
+<li>compile : Compiles the sources.</li>
+<li>docs : Creates the javadoc pages.</li>
+<li>clean : Cleans the temporary compile / javadoc directories.</li>
+</ul>
+<p>Running</p>
+<blockquote>
+ant
+</blockquote>
+<p>(i.e. without a target) will give you a help screen.</p>

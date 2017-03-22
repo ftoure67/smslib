@@ -1,0 +1,91 @@
+<h1>SMSServer Gateways</h1>
+
+<h2>Introduction</h2>
+<p>Gateways represent devices or services capable of sending and/or receiving SMS messages.</p>
+<p>SMSServer supports the following gateways, which are directly mapped to SMSLib core library's gateways:</p>
+<ul>
+<li>Serial Modem</li>
+<li>IP Modem</li>
+<li>Clickatell</li>
+</ul>
+
+<h2>SerialModem (gateways.SerialModem)</h2>
+<p>This gateway is used for gsm modems connected via a serial port.</p>
+
+<h3>Configuration File</h3>
+<p>This interface requires the following configuration settings:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b></td></tr>
+<tr><td>port</td><td>the comm port to use, for example COM1 or /dev/ttyS0.</td></tr>
+<tr><td>baudrate</td><td>the baudrate, for example 19200.</td></tr>
+<tr><td>manufacturer</td><td>the manufacturer string, for example Nokia.</td></tr>
+<tr><td>model</td><td>the modem string, for example 6310i.</td></tr>
+<tr><td>protocol</td><td>the protocol in use, either PDU or TEXT.</td></tr>
+<tr><td>pin</td><td>the SIM PIN.</td></tr>
+<tr><td>inbound</td><td>"<b>yes</b>" if the gateway should be treaded asan inbound gateway, otherwise "<b>no</b>".</td></tr>
+<tr><td>outbound</td><td>"<b>yes</b>" if the gateway should be treaded as an outbound gateway, otherwise "<b>no</b>".</td></tr>
+</table>
+<p>Example:</p>
+<blockquote>
+gateway.0=myModem, SerialModem<br />
+myModem.port=COM1<br />
+myModem.baudrate=19200<br />
+myModem.manufacturer=Nokia<br />
+myModem.model=6310i<br />
+myModem.protocol=PDU<br />
+myModem.pin=0000<br />
+myModem.inbound=yes<br />
+myModem.outbound=yes<br />
+</blockquote>
+
+<h2>IPModem (gateways.IPModem)</h2>
+<p>This gateway is used for gsm modems connected via an IP port.</p>
+
+<h3>Configuration File</h3>
+<p>This interface requires the following configuration settings:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b></td></tr>
+<tr><td>ip</td><td>the IP address of the modem, for example 192.168.100.110.</td></tr>
+<tr><td>port</td><td>the IP port to which the modem is listening, for example 9900.</td></tr>
+<tr><td>manufacturer</td><td>the manufacturer string, for example Nokia.</td></tr>
+<tr><td>model</td><td>the modem string, for example 6310i.</td></tr>
+<tr><td>protocol</td><td>the protocol in use, either PDU or TEXT.</td></tr>
+<tr><td>pin</td><td>the SIM PIN.</td></tr>
+<tr><td>inbound</td><td>"<b>yes</b>" if the gateway should be treaded asan inbound gateway, otherwise "<b>no</b>".</td></tr>
+<tr><td>outbound</td><td>"<b>yes</b>" if the gateway should be treaded as an outbound gateway, otherwise "<b>no</b>".</td></tr>
+</table>
+<p>Example:</p>
+<blockquote>
+gateway.0=myModem, IPModem<br />
+myModem.ip=192.168.100.110<br />
+myModem.port=9900<br />
+myModem.manufacturer=Nokia<br />
+myModem.model=6310i<br />
+myModem.protocol=PDU<br />
+myModem.pin=0000<br />
+myModem.inbound=yes<br />
+myModem.outbound=yes<br />
+</blockquote>
+
+<h2>ClickatellHttp (gateways.ClickatellHttp)</h2>
+<p>This gateway is used for the Clickatell HTTP interface.</p>
+
+<h3>Configuration File</h3>
+<p>This interface requires the following configuration settings:</p>
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b></td></tr>
+<tr><td>api_id</td><td>Clickatell API ID.</td></tr>
+<tr><td>username</td><td>Clickatell Username.</td></tr>
+<tr><td>password</td><td>Clickatell Password.</td></tr>
+<tr><td>secure</td><td>If set to "<b>yes</b>", the gateway will use a secure (https) connection.</td></tr>
+<tr><td>outbound</td><td>"<b>yes</b>" if the gateway should be treaded as an outbound gateway, otherwise "<b>no</b>".</td></tr>
+</table>
+<p>Example:</p>
+<blockquote>
+gateway.0=myClickatell, ClickatellHttp<br />
+myClickatell.api_id=1234<br />
+myClickatell.username=thanasis<br />
+myClickatell.password=password<br />
+myClickatell.secure=no<br />
+myClickatell.outbound=yes<br />
+</blockquote>

@@ -1,0 +1,33 @@
+<h1>SMSServer - JMX Interface</h1>
+
+<h2>Introduction</h2>
+<p>The JMX interface starts a JMX daemon and waits for inbound connections.</p>
+<p>A client can connect to the JMX at</p>
+<blockquote>
+service:jmx:rmi:///jndi/rmi://<host>:<port>/SMSlib
+</blockquote>
+with the object name
+<blockquote>
+org.smslib:name=SMSServer
+</blockquote>
+
+<p>Outbound messages from a client are spooled in the interface and are send on the next SMSServer run.</p>
+<p>Inbound messages are spooled in the interface and the client gets all if he asks for them. Afterwards, the inbound messages spool is cleard!</p>
+
+<h2>Configuration File</h2>
+<p>This interface requires the following configuration settings:</p>
+
+<table border='1' cellpadding='7' cellspacing='2'>
+<tr><td><b>Option</b></td><td><b>Description</b></td></tr>
+<tr><td>registry_port</td><td>Port of the local RMI registry. Should be the same as in <b>url</b></td></tr>
+<tr><td>url</td><td>URL of the JMX Service</td></tr>
+<tr><td>object_name</td><td> The name under which the managed bean should be availible</td></tr>
+</table>
+
+<p>Example:</p>
+<blockquote>
+interface.0=jmx1, Jmx<br />
+jmx1.registry_port=1988<br />
+jmx1.url=service:jmx:rmi:///jndi/rmi://localhost:1988/SMSlib<br />
+jmx1.object_name=org.smslib:name=SMSServer<br />
+</blockquote>

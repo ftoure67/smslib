@@ -1,0 +1,63 @@
+<h1>SMSLib Callbacks</h1>
+
+<h2>Introduction</h2>
+<p>SMSLib can be setup to call specific methods (callbacks) for certain events, like when an inbound message is received.</p>
+<p>Following are the available callbacks and the events that trigger them.</p>
+
+<h3>Inbound Messages</h3>
+<p>SMSLib can be set to call a user-defined method when a message is received by one of its active gateways. This defines an alternative method of receiving messages, instead of continously polling the modem with the <code>readMessages()</code> method.</p>
+<p>The user should implement a class based on the <code>IInboundMessageNotification</code> interface. The <b>process</b> method of this interface is called with three (3) parameters:</p>
+<ul>
+<li><b>Gateway Id</b>: The ID of the gateway which received a message.</li>
+<li><b>Message Type</b>: The type of the received message.</li>
+<li><b>Message</b>: The actual message received.</li>
+</ul>
+<p>The callback method is set by using the <code>Service.setInboundNotification()</code> method.</p>
+<p>Notes:</p>
+<ul>
+<li>In case you receive a multi-part (big) message, the callback method will be called <b>when all parts are received</b>. The message will then be the complete, large message.</li>
+<li>The correct operation of this method depends on the unsolicited modem indications and on the correct operation of the CNMI command. If you see that you are failing to receive messages using a callback method, probably the modem indications have not been setup correctly.</li>
+<li>A alternate way of dealing with inbound messages is to use a callback method for receiving messages and also implement polling using a big polling interval.</li>
+</ul>
+
+<h3>Outbound Messages</h3>
+<p>If you sending messages via the <code>queueMessage(s)</code> methods (i.e. you are using the async sending feature), you are also able to set a callback method so as SMSLib will call this upon successful or unsuccessful dispatch of a message.</p>
+<p>The user should implement a class based on the <code>IOutboundMessageNotification</code> interface. The <b>process</b> method of this interface is called with two (2) parameters:</p>
+<ul>
+<li><b>Gateway Id</b>: The ID of the gateway which triggered this event.</li>
+<li><b>Message</b>: The actual message sent.</li>
+</ul>
+<p>The callback method is set by using the <code>Service.setOutboundNotification()</code> method.</p>
+<p>Notes:</p>
+<ul>
+<li>If you are not using the <code>queueMessage(s)</code> methods (i.e. if you are sending messages via the <code>sendMessage(s)</code> methods) this callback will never be called.</li>
+<li>Once called, the message parameter will be updated with the correct status. So you can query it in order to find out whether the message was actually sent or not, etc</li>
+</ul>
+
+<h3>Inbound calls</h3>
+<p>SMSLib can be set to call a callback method once a voice call has been received by one of its active gateways.</p>
+<p>The user should implement a class based on the <code>ICallNotification</code> interface. The <b>process</b> method of this interface is called with two (2) parameters:</p>
+<ul>
+<li><b>Gateway Id</b>: The ID of the gateway which received the voice call.</li>
+<li><b>Caller Id</b>: The caller id of the caller.</li>
+</ul>
+<p>The callback method is set by using the <code>Service.setCallNotification()</code> method.</p>
+<p>Notes:</p>
+<ul>
+<li>The default SMSLib behavior when a voice call is received is to call any previously set callback method and then automatically hangup the call. This behavior cannot be changed.</li>
+</ul>
+
+<h3>Gateway Status changes</h3>
+<p>SMSLib can be set to call a method on every gateway status change.</p>
+<p>The user should implement a class based on the <code>IGatewayStatusNotification</code> interface. The <b>process</b> method of this interface is called with three (3) parameters:</p>
+<ul>
+<li><b>Gateway Id</b>: The ID of the gateway which changed status.</li>
+<li><b>Old Status</b>: The old status.</li>
+<li><b>New Status</b>: The new status.</li>
+</ul>
+<p>The callback method is set by using the <code>Service.setStatusNotification()</code> method.</p>
+
+<h2>Important version changes</h2>
+<ul>
+	<li>Starting from version v3.3.0 Beta 4, the callback notifications have been moved from the Gateway level to the Service level. Gateway level notifications still work but are marked as deprecated.
+</ul>
